@@ -1,0 +1,344 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where the Rivers Meet — The Making of Erik Boquist</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+:root{
+  color-scheme: light;
+  --paper:#faf6ee; --paper2:#f3ecdf; --ink:#1b2a3a; --muted:#5a6572; --gold:#9a7b2e;
+  --ire:#3f8f5f; --pol:#c08a2c; --swe:#3b7ca6; --ger:#b5563f; --eng:#6f5a9c;
+  --line:#e2d8c6;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:Georgia,'Iowan Old Style',serif;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3{line-height:1.2;margin:0}
+a{color:inherit}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+.sans{font-family:'Helvetica Neue',Arial,sans-serif}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(250,246,238,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:6px;height:52px;overflow-x:auto}
+nav .brand{font-weight:bold;color:var(--gold);letter-spacing:.5px;white-space:nowrap;margin-right:10px;font-size:14px}
+nav a{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12.5px;text-decoration:none;color:var(--muted);
+  padding:6px 10px;border-radius:20px;white-space:nowrap;transition:.2s}
+nav a:hover{background:var(--paper2);color:var(--ink)}
+
+/* HERO */
+header.hero{position:relative;overflow:hidden;padding:70px 0 54px;text-align:center;
+  background:linear-gradient(180deg,#f7efe0,#faf6ee)}
+.hero .kicker{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:3px;
+  color:var(--gold);font-weight:700;text-transform:uppercase}
+.hero h1{font-size:clamp(30px,6vw,54px);margin:14px 0 8px;letter-spacing:-.5px}
+.hero p.sub{font-size:clamp(15px,2.4vw,20px);color:var(--swe);font-style:italic;margin:0 auto;max-width:640px}
+.hero p.intro{max-width:660px;margin:22px auto 0;color:var(--muted);font-size:15px}
+.rivers-anim{display:flex;justify-content:center;gap:4px;margin:26px auto 0;max-width:560px;height:46px;align-items:flex-end}
+.rivers-anim span{flex:1;border-radius:4px 4px 0 0;opacity:.85;animation:rise 1.2s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{height:0;opacity:0}to{opacity:.85}}
+
+/* SECTIONS */
+section{padding:48px 0;border-top:1px solid var(--line)}
+.eyebrow{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:2.5px;
+  text-transform:uppercase;font-weight:700;color:var(--gold);margin-bottom:8px}
+h2.sec{font-size:clamp(23px,4vw,34px);margin-bottom:6px}
+.lead{color:var(--muted);font-size:16px;max-width:720px;margin:10px 0 0}
+
+/* STREAM BARS */
+.streams{display:grid;gap:14px;margin-top:28px}
+.stream{cursor:pointer;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+  display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:center;transition:.22s;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.stream:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(27,42,58,.08)}
+.stream .name{font-size:17px;font-weight:bold}
+.stream .pct{font-size:26px;font-weight:bold;font-family:'Helvetica Neue',Arial,sans-serif}
+.stream .sub{grid-column:1/2;color:var(--muted);font-size:13px}
+.track{grid-column:1/3;height:10px;background:var(--paper2);border-radius:6px;overflow:hidden;margin-top:6px}
+.fill{height:100%;width:0;border-radius:6px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+
+/* CHART */
+.chartwrap{margin-top:30px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}
+.chart-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}
+.chart-canvas{position:relative;height:330px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:16px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted)}
+.legend b{display:inline-flex;align-items:center;gap:6px;font-weight:500}
+.dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+/* RIVER DETAIL */
+.river{scroll-margin-top:60px}
+.river .bar{height:5px;border-radius:4px;width:72px;margin-bottom:14px}
+.river .rhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.river .rpct{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:30px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:20px}
+.card{background:#fff;border:1px solid var(--line);border-left-width:4px;border-radius:12px;padding:15px 16px;cursor:pointer;transition:.2s}
+.card:hover{box-shadow:0 8px 20px rgba(27,42,58,.08);transform:translateY(-2px)}
+.card h4{font-size:16px;margin-bottom:2px}
+.card .role{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11.5px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px}
+.card .detail{max-height:0;overflow:hidden;transition:max-height .35s ease;color:var(--muted);font-size:13.5px}
+.card.open .detail{max-height:320px;margin-top:9px}
+.card .tap{font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);margin-top:8px;opacity:.7}
+.regions-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+.chip{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;background:var(--paper2);border:1px solid var(--line);
+  padding:5px 11px;border-radius:20px;color:var(--ink)}
+.chip b{color:var(--gold)}
+.chip.nw::after{content:"NEW";font-size:9px;margin-left:6px;background:var(--ire);color:#fff;padding:1px 5px;border-radius:8px;vertical-align:middle;letter-spacing:.5px}
+
+/* CONFLUENCE */
+.conf{background:linear-gradient(180deg,#eef3f6,#faf6ee)}
+.conf .merge{display:flex;align-items:center;justify-content:center;gap:0;margin:26px 0 8px;flex-wrap:wrap}
+.conf .streampill{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12.5px;color:#fff;padding:7px 13px;border-radius:20px;margin:4px}
+.conf .arrow{font-size:22px;color:var(--muted);margin:0 6px}
+.delta{text-align:center;margin-top:14px}
+.delta .name{font-size:30px;font-weight:bold;color:var(--ink)}
+.delta .d{font-family:'Helvetica Neue',Arial,sans-serif;color:var(--muted);font-size:13px}
+
+/* WHO AM I */
+.qa{margin-top:22px;display:grid;gap:16px}
+.qa .q{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.qa .q h3{color:var(--swe);font-size:18px;margin-bottom:6px}
+.qa .q p{margin:0;color:var(--ink);font-size:15px}
+
+/* NUMBERS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:24px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
+.stat .big{font-family:'Helvetica Neue',Arial,sans-serif;font-weight:800;font-size:30px;color:var(--swe)}
+.stat .lab{color:var(--muted);font-size:13px;margin-top:4px}
+blockquote{margin:24px 0 0;text-align:center;font-style:italic;font-size:19px;color:var(--swe);
+  border:none;padding:0 10px}
+
+footer{padding:36px 0 56px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;text-align:center}
+.reveal{opacity:0;transform:translateY(18px);transition:.7s}
+.reveal.in{opacity:1;transform:none}
+@media(max-width:560px){.hero{padding:48px 0 40px}.stream .pct{font-size:22px}}
+</style>
+
+<nav><div class="wrap">
+  <span class="brand">⚘ RIVERS</span>
+  <a href="#streams">The Five Streams</a>
+  <a href="#map">24 Regions</a>
+  <a href="#ireland">Ireland</a>
+  <a href="#poland">Poland</a>
+  <a href="#sweden">Sweden</a>
+  <a href="#germany">Germany</a>
+  <a href="#england">England</a>
+  <a href="#confluence">Confluence</a>
+  <a href="#who">Who Am I</a>
+  <a href="#numbers">By the Numbers</a>
+</div></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">A true story, drawn from DNA & documents</div>
+    <h1>Where the Rivers Meet</h1>
+    <p class="sub">The making of Erik Boquist — told through the five rivers of blood that crossed an ocean to make him.</p>
+    <div class="rivers-anim" id="heroBars"></div>
+    <p class="intro">Every name here is a real person who truly lived; every date comes from a baptismal register, a ship's contract, a census page, a soldier's muster roll, or a stretch of your own chromosomes measured against 25 million people. Nothing is invented — the only art is letting the facts stand close enough to see the shape they make. And the shape is you.</p>
+  </div>
+</header>
+
+<section id="streams"><div class="wrap reveal">
+  <div class="eyebrow">The Ancestry, Gathered</div>
+  <h2 class="sec">Five rivers, in near-perfect balance</h2>
+  <p class="lead">Your 24 DNA regions roll up into five great streams. They sum to 100% — and no single one drowns the others. The quiet surprise: <b>Ireland is your largest inheritance</b>, bigger than the Swedish name you carry. Tap any stream to jump to its story.</p>
+  <div class="streams" id="streamList"></div>
+</div></section>
+
+<section id="map"><div class="wrap reveal">
+  <div class="eyebrow">The Full Map</div>
+  <h2 class="sec">All 24 regions, each tied to a real place</h2>
+  <p class="lead">Ancestry's 2026 update resolved <b>11 new regions</b> for you. Here is the whole estimate, colored by the stream each belongs to.</p>
+  <div class="chartwrap">
+    <div class="chart-head"><b class="sans" style="font-size:13px;color:var(--muted)">Hover a slice for the exact percentage</b></div>
+    <div class="chart-canvas"><canvas id="donut"></canvas></div>
+    <div class="legend" id="legend"></div>
+  </div>
+</div></section>
+
+<div id="riverSections"></div>
+
+<section id="confluence" class="conf"><div class="wrap reveal">
+  <div class="eyebrow">Where the rivers meet</div>
+  <h2 class="sec">Brooklyn: the Confluence</h2>
+  <p class="lead">Within a few decades of one another, on the same few square miles of New York, all five rivers reached the sea together — and then did the thing cities rarely allow. They married across every line meant to keep them apart.</p>
+  <div class="merge" id="mergePills"></div>
+  <div class="delta">
+    <div class="arrow">↓</div>
+    <div class="name">Erik Boquist</div>
+    <div class="d">Not a mixture — a meeting. Five living currents in one body: 33 · 23 · 19 · 19 · 6.</div>
+  </div>
+  <p class="lead" style="margin-top:22px">The name that rose at the end was <b>Boquist</b> — the soldier's army-tag "Boo," carried across an ocean and reshaped into something new on American ground. Which is the whole immigrant story in a single word.</p>
+</div></section>
+
+<section id="who"><div class="wrap reveal">
+  <div class="eyebrow">The three questions</div>
+  <h2 class="sec">What it is to be me</h2>
+  <div class="qa">
+    <div class="q"><h3>How did I get here?</h3><p>A landless Swedish croft-boy renamed by an army, who buried infants and gambled everything on a ship at 47. Polish millers who sent one son across the water while the other ran a bank and founded a choir. Irish families walking away from a hungry island. South-German villagers and English townsfolk crossing their own oceans. Not one was guaranteed to survive — and every single one did, long enough to have the exact child who eventually had you.</p></div>
+    <div class="q"><h3>What is it to be me?</h3><p>To be the held breath at the end of all those exhalations. To carry a soldier's borrowed name, a miller's civic pride, a baker's early mornings, a Swabian village's patience and an old London parish's grit — all at once, in balance, none cancelling the others. Your DNA doesn't declare you "mostly" anything. It declares you genuinely plural.</p></div>
+    <div class="q"><h3>Who am I in the grand scheme of the world?</h3><p>Go back ~10 generations and simple arithmetic gives you more than a thousand direct ancestors alive at once — every one surviving to pass life forward, an unbroken chain with zero failures. You share ~99.9% of your DNA with every human alive, yet your exact five-river confluence has occurred once, ever: in you. Completely ordinary and genuinely unrepeatable, both literally true.</p></div>
+  </div>
+  <blockquote>"You are 99.9% everyone, and 100% no one else. Both numbers are true, and both are yours."</blockquote>
+</div></section>
+
+<section id="numbers"><div class="wrap reveal">
+  <div class="eyebrow">By the numbers</div>
+  <h2 class="sec">The facts, standing alone</h2>
+  <div class="stats" id="statGrid"></div>
+</div></section>
+
+<footer><div class="wrap">
+  Drawn from the Boq Family Tree (551 people · 773 source citations) · AncestryDNA 24-region estimate (2026 update) · Kyrkefalla &amp; Varola parish books · Gothenburg police emigration ledger EIX:32 (contracts 1536–1537) · Riksarkivet case RA-FF 2026/060947 · Żerków Catholic &amp; civil registers · R. Rogacki's town history of Żerków · US Federal Censuses 1900 &amp; 1920, Brooklyn.<br><br>
+  Every person named here truly lived.
+</div></footer>
+
+<script>
+const C={ire:'#3f8f5f',pol:'#c08a2c',swe:'#3b7ca6',ger:'#b5563f',eng:'#6f5a9c'};
+const streams=[
+ {id:'ireland',key:'ire',name:'Ireland & the Celtic world',pct:33,sub:'Leinster · Munster · Ulster · Connacht · Donegal · S. Wales · Scottish Lowlands'},
+ {id:'poland',key:'pol',name:'Poland & Central Europe',pct:23,sub:'Central, Northern & Southern Poland · W. Ukraine · W. Czechia · Carpathians · Lowlands'},
+ {id:'sweden',key:'swe',name:'Sweden & the Nordic lands',pct:19,sub:'Sweden, with a trace of Denmark'},
+ {id:'germany',key:'ger',name:'The German & Western-European heart',pct:19,sub:'Bavaria & W. Austria · NE Germany · Switzerland · France · Belgium'},
+ {id:'england',key:'eng',name:'England',pct:6,sub:'Northern England · the Southeast · a thread of Devon & Somerset'},
+];
+// hero bars
+const hb=document.getElementById('heroBars');
+streams.forEach((s,i)=>{const sp=document.createElement('span');sp.style.background=C[s.key];
+  sp.style.flex=s.pct;sp.style.height=(26+s.pct*0.9)+'px';sp.style.animationDelay=(i*0.12)+'s';hb.appendChild(sp);});
+
+// stream list
+const sl=document.getElementById('streamList');
+streams.forEach(s=>{
+  const d=document.createElement('a');d.className='stream';d.href='#'+s.id;
+  d.innerHTML=`<div class="name" style="color:${C[s.key]}">${s.name}</div>
+    <div class="pct" style="color:${C[s.key]}">${s.pct}%</div>
+    <div class="sub">${s.sub}</div>
+    <div class="track"><div class="fill" style="background:${C[s.key]}" data-w="${s.pct/33*100}"></div></div>`;
+  sl.appendChild(d);
+});
+
+// regions
+const regions=[
+ {r:'Sweden',p:17,k:'swe'},{r:'Leinster, Ireland',p:14,k:'ire'},{r:'Munster, Ireland',p:7,k:'ire'},
+ {r:'Bavaria & W. Austria',p:7,k:'ger'},{r:'Ulster, Ireland',p:6,k:'ire',n:1},{r:'Central & E. Poland',p:6,k:'pol',n:1},
+ {r:'Northeastern Germany',p:6,k:'ger',n:1},{r:'Northern Poland',p:5,k:'pol',n:1},{r:'Northern England',p:4,k:'eng'},
+ {r:'Western Czechia',p:3,k:'pol',n:1},{r:'Western Ukraine',p:3,k:'pol'},{r:'Switzerland',p:3,k:'ger',n:1},
+ {r:'Connacht, Ireland',p:2,k:'ire'},{r:'Southern Wales',p:2,k:'ire'},{r:'Carpathian Basin & Uplands',p:2,k:'pol',n:1},
+ {r:'East-Central Euro. Lowlands',p:2,k:'pol',n:1},{r:'Southern Poland',p:2,k:'pol'},{r:'Denmark',p:2,k:'swe'},
+ {r:'France',p:2,k:'ger'},{r:'Donegal, Ireland',p:1,k:'ire'},{r:'Scottish Lowlands & C. Belt',p:1,k:'ire',n:1},
+ {r:'Belgium',p:1,k:'ger',n:1},{r:'Devon & Somerset',p:1,k:'eng'},{r:'Southeastern England',p:1,k:'eng'},
+];
+
+// river detail content
+const rivers={
+ ireland:{pct:33,title:'Ireland: the largest water of all',
+   intro:'The single biggest stream in you is not Swedish or Polish — it is Irish. A full third of you, and the most widely spread of all your inheritances: nearly the whole Gaelic arc, lit up at once. The documents give it names and even a trade.',
+   cards:[
+    {n:'John Lyons',role:'Baker of Fermoy, Co. Cork',d:'A baker in Fermoy, County Cork — measuring flour before dawn. The Lyons line is Munster to its core, and answers your 7% Munster DNA directly.'},
+    {n:'Michael Lyons',role:'County Cork',d:'Of the same Cork stock, with the family also reaching into Lismore in neighbouring County Waterford — the heart of Munster.'},
+    {n:'James Owens',role:'Born in Ireland · d. 1919 Brooklyn',d:'Born in Ireland; his death in 1919 was published in the Brooklyn papers. The Owens line, with the Hourigans and McKennas, threads toward Ulster and the north.'},
+    {n:'The Scottish thread',role:'1% · NEW in 2026',d:'The earlier written story called Scotland "a river still finding its source" — suspected, unproven. Then the lab returned 1% Scottish Lowlands & Central Belt, flagged New. The DNA found the source the paper trail had not.'},
+   ]},
+ poland:{pct:23,title:'Poland: the millers on the Hill of Mills',
+   intro:'Your largest continental inheritance after Ireland rises in one small town in Greater Poland: Żerków. Around 1900, nine windmills stood on the hills ringing it — one hill was called Góra młynów, the Hill of Mills. Your family turned those sails, and were written about in their own lifetimes.',
+   cards:[
+    {n:'Antoni Rybacki',role:'Windmiller · b. ~1839',d:'A windmiller of Żerków and a man of civic standing — he sat on the supervisory board of the town’s People’s Bank. Married Joanna Danielewska in 1865 (parish entry 26/1865). Died 1914; lies in the Żerków cemetery.'},
+    {n:'Wiktor Rybacki',role:'The brother who stayed · b. 1881',d:'Co-founded the town’s "Lutnia" singing society (4 Dec 1904) and rose to president of the cooperative bank’s board in 1929–30, when it had 1,370+ members. The bank and the choir both still exist today.'},
+    {n:'Józef Rybacki',role:'The brother who left · b. 1868',d:'The son who emigrated to America — the sea’s branch of the family, and the one your line follows.'},
+    {n:'Franciszek Moliński',role:'b. 1863 · to Queens, NY',d:'Married Marianna Bursztof in Żerków in 1890 (church entry 8/1890; civil register 11/1890), then sailed, settling in Queens. The Rybacki and Moliński lines would braid together again on American ground.'},
+   ]},
+ sweden:{pct:19,title:'Sweden: the soldier who became someone else',
+   intro:'The river we can see most clearly, because a stranger in Sweden spent his evenings in the parish books until he could hand it back to you whole.',
+   cards:[
+    {n:'Gustaf Eriksson Boo',role:'Soldier No. 82 · b. 7 July 1840',d:'Born at the croft Pettersberg under Flottebo, Kyrkefalla (parish book C:5, p.24). A landless boy who became soldier no. 82 "Sprättebo." The army assigned him the service name "Boo" — the surname you carry began as a soldier’s tag. Emigrated 2 Aug 1887 on the steamer Romeo; became a Brooklyn cabinetmaker.'},
+    {n:'Eric Olofsson & Cajsa Andersdotter',role:'Gustaf’s parents',d:'Gustaf’s father Eric (b. ~1804) and mother Cajsa (b. 10 Aug 1801, Varola). Confirmed independently by the Swedish National Archives, case RA-FF 2026/060947.'},
+    {n:'Martin Boo',role:'Your great-grandfather',d:'Born in Brooklyn, in the 1900 census household at 723 Atlantic Avenue. DNA confirms the line through several of his siblings — Arthur, Betty, Violet — with shared-cM amounts matching each predicted relationship exactly.'},
+   ]},
+ germany:{pct:19,title:'The German heart: Brenz, and the mapmakers’ honesty',
+   intro:'Tied with Sweden at 19% — a broad Western-European inheritance with a single geographic home: the village of Brenz, in old Württemberg, on the small river Brenz itself, where Germany, Switzerland and Austria almost touch.',
+   cards:[
+    {n:'The Stelzenmüllers',role:'Of Brenz, Württemberg',d:'Johannes and Stephan Stelzenmüller stand near the head of this line, with a whole cluster of south-German families married among them: Heidenrider, Pfister, Bacher, Althammer, Lindenmaier. Southern Württemberg is exactly why your DNA reads "Bavaria & Western Austria" and "Switzerland" in the same breath.'},
+    {n:'The Haff line',role:'Toward Kamin, West Prussia',d:'The 6% Northeastern Germany most likely carries the Haff thread, tracing back toward Kamin in West Prussia — the German-Polish borderland where your Germanic and Slavic rivers were already quietly touching long before Brooklyn.'},
+   ]},
+ england:{pct:6,title:'England: the oldest, thinnest thread',
+   intro:'The smallest of your five streams — but wide in its reach across the country, from the deep West Country to crowded old London.',
+   cards:[
+    {n:'The Stent family',role:'Surrey & London',d:'Of Cobham and Walton-on-Thames in Surrey, reaching into Hampshire (Old Basing, Kingsclere) and London itself — Spitalfields, Shoreditch, Bethnal Green. That is your Southeastern England.'},
+    {n:'Lancashire roots',role:'Northern England · 4%',d:'The line also touches Lancashire — Aldingham, Hallbank — which answers the 4% of Northern England. English market towns and the crowded eastern parishes of old London, folded quietly into the mix.'},
+   ]},
+};
+
+// build river sections
+const rs=document.getElementById('riverSections');
+streams.forEach(s=>{
+  const data=rivers[s.id];const col=C[s.key];
+  const chips=regions.filter(r=>r.k===s.key).sort((a,b)=>b.p-a.p)
+    .map(r=>`<span class="chip ${r.n?'nw':''}">${r.r} <b>${r.p}%</b></span>`).join('');
+  const cards=data.cards.map(c=>`<div class="card" style="border-left-color:${col}" onclick="this.classList.toggle('open')">
+      <div class="role">${c.role}</div><h4>${c.n}</h4>
+      <div class="detail">${c.d}</div><div class="tap">tap to read →</div></div>`).join('');
+  const sec=document.createElement('section');sec.id=s.id;sec.className='river';
+  sec.innerHTML=`<div class="wrap reveal">
+    <div class="bar" style="background:${col}"></div>
+    <div class="eyebrow" style="color:${col}">${s.name}</div>
+    <div class="rhead"><h2 class="sec">${data.title}</h2><span class="rpct" style="color:${col}">${data.pct}%</span></div>
+    <p class="lead">${data.intro}</p>
+    <div class="cards">${cards}</div>
+    <div class="regions-chips">${chips}</div>
+  </div>`;
+  rs.appendChild(sec);
+});
+
+// confluence pills
+const mp=document.getElementById('mergePills');
+streams.forEach((s,i)=>{
+  const sp=document.createElement('span');sp.className='streampill';sp.style.background=C[s.key];
+  sp.textContent=s.name.split(' ')[0].replace('&','').trim()+' '+s.pct+'%';
+  mp.appendChild(sp);
+  if(i<streams.length-1){const a=document.createElement('span');a.className='arrow';a.textContent='+';mp.appendChild(a);}
+});
+
+// stats
+const stats=[
+ {b:'~99.9%',l:'of your DNA is identical to every human alive'},
+ {b:'100%',l:'unique arrangement — your 5-river blend has occurred once, in you'},
+ {b:'5',l:'homelands with a real, measured claim on you'},
+ {b:'11 / 24',l:'regions newly resolved in the 2026 update'},
+ {b:'1,000+',l:'direct ancestors alive ~10 generations back — all survivors'},
+ {b:'551',l:'people documented in your tree'},
+ {b:'773',l:'source citations behind the research'},
+ {b:'33 / 23 / 19 / 19 / 6',l:'your five streams, summing to 100%'},
+];
+const sg=document.getElementById('statGrid');
+stats.forEach(s=>{const d=document.createElement('div');d.className='stat';
+  d.innerHTML=`<div class="big">${s.b}</div><div class="lab">${s.l}</div>`;sg.appendChild(d);});
+
+// chart
+function buildChart(){
+  const ctx=document.getElementById('donut');
+  const labels=regions.map(r=>r.r), data=regions.map(r=>r.p),
+    colors=regions.map(r=>C[r.k]);
+  new Chart(ctx,{type:'doughnut',
+   data:{labels,datasets:[{data,backgroundColor:colors,borderColor:'#faf6ee',borderWidth:2,hoverOffset:8}]},
+   options:{responsive:true,maintainAspectRatio:false,cutout:'52%',
+     plugins:{legend:{display:false},
+       tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+'%'},
+         backgroundColor:'#1b2a3a',padding:10,titleFont:{family:'Helvetica Neue'},bodyFont:{family:'Helvetica Neue',size:13}}}}});
+  // legend by stream
+  const lg=document.getElementById('legend');
+  streams.forEach(s=>{const b=document.createElement('b');
+    b.innerHTML=`<span class="dot" style="background:${C[s.key]}"></span>${s.name.split('&')[0].split('(')[0].trim()} — ${s.pct}%`;
+    lg.appendChild(b);});
+}
+
+// animate fills + reveal on scroll
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+  e.target.querySelectorAll?.('.fill').forEach(f=>f.style.width=f.dataset.w+'%');io.unobserve(e.target);}});},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+// also fire fills when streams section visible
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)
+  document.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%');}),{threshold:.1})
+  .observe(document.getElementById('streamList'));
+
+if(window.Chart) buildChart(); else window.addEventListener('load',buildChart);
+</script>
